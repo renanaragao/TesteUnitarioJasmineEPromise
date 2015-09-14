@@ -1,15 +1,19 @@
 var appAngular = angular.module('appAngular', []);
 
-appAngular.factory('factoryPessoa', ['$q', function($q){
+appAngular.factory('factoryPessoa', ['$q', '$http', function($q, $http){
 
 	return {
 		getPessoa: function(){
 
-			var defered = $q.defer();
+			var defer = $q.defer();
 
-			defered.resolve({nome: 'Renan', idade: 23});
+			$http.get('/pessoa').success(function(data){
+                
+                defer.resolve(data);
+            
+            });
 
-			return defered.promise;
+			return defer.promise;
 
 		}
 	};
@@ -23,12 +27,12 @@ myApp.getPessoa =  function(){
 
 	var request = new XMLHttpRequest();
 
-	request.open('GET','https://developer.mozilla.org/pt-BR/docs/Web/API/XMLHttpRequest', true);
+	request.open('GET','/pessoa', true);
 
 	request.send();
 
-	request.addEventListener("load", function() {  
-		fnSuccess({nome: 'Renan', idade: 23});
+	request.addEventListener("load", function(data) {  
+		fnSuccess(data);
 	}, false);
 
 	request.addEventListener("error", function() {  
